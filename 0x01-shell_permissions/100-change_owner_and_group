@@ -1,2 +1,2 @@
 #!/bin/bash
-chown vincent:staff my_dir/
+chown vincent:staff *
