@@ -1,2 +1,2 @@
 #!/bin/bash
-paste "/etc/passwd" "/etc/hosts" | awk -F'\t'
+pr -m -t /etc/passwd /etc/hosts
