@@ -1,2 +1,2 @@
 #!/bin/bash
-sed 's/Ac/Ze'
+tr 'Ac/Ze'
