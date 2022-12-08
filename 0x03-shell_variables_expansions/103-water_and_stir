@@ -1,2 +1,2 @@
 #!/bin/bash
-bestchol="water+stir"
+bestchol="water+stir" PRINT "bestchol"
