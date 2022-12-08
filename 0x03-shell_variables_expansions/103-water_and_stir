@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $((BESTCHOL="WATER+STIR"))
+printf '%o\n' $(echo $((BESTCHOL="WATER+STIR")))
