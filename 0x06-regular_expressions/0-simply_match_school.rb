@@ -1,18 +1,21 @@
 #!/usr/bin/env ruby
+
 # Script accepts one argument
 # And passes it to a regular expression matching method
 
 regex = /School/
 
-if ARGV.length != 1
-  puts "Usage: ruby script.rb <string>"
-  exit 1
-end
+#Test strings
+test_strings = [
+"I study at the School of Science",
+"Mat is my favorite subject",
+"Studies begin early in the morning",
+"Schoolday",
+"Last school day"
+]
 
-input_string = ARGV[0]
-
-if regex.match?(input_string)
-  puts "The input string contains 'School'."
-else
-  puts "The input string does not contain 'School'."
-end
+# Test the regular expression
+test_strings.each do |str|
+  if regex.match?(str)
+    puts "Match found!"
+  end
