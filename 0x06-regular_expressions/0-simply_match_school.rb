@@ -3,19 +3,22 @@
 # Script accepts one argument
 # And passes it to a regular expression matching method
 
-regex = /School/
+def match_school(str)
+  pattern = /School/
+  match_result = str.match(pattern)
 
-#Test strings
-test_strings = [
-"I study at the School of Science",
-"Mat is my favorite subject",
-"Studies begin early in the morning",
-"Schoolday",
-"Last school day"
-]
-
-# Test the regular expression
-test_strings.each do |str|
-  if regex.match?(str)
-    puts "Match found!"
+  if match_result
+    puts match_result[0]
+  else
+    puts "No match found."
   end
+end
+
+# Input
+match_School("School")
+
+match_School("Best School")
+
+match_School("School Best School")
+
+match_School("Grace Miller")
