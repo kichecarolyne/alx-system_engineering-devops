@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # regex matcher
 
-regex = /vent/
+puts ARGV[0].scan(/School/).join
 
   if match_result
     puts match_result[0]
