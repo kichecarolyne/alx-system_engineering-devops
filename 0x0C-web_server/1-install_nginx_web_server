@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Installs nginx server
+# Install Nginx and the init file have only a message
 
-sudo apt-get update
-sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-echo "Hello World!" > sudo tee /var/www/html/index.html > /dev/null
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install nginx -y
 sudo service nginx start
+echo "Hello World!" | tee /var/www/html/index.nginx-debian.html
