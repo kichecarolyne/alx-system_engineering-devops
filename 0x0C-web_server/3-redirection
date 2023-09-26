@@ -5,6 +5,12 @@
 #   - Configures Nginx to redirect /redirect_me with a "301 Moved Permanently" status code
 #   - Sets the redirection target to a specific page
 
+# Check if the script is running as root
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run as root."
+	exit 1
+fi
+
 # Install Nginx (if not already installed)
 apt-get update > /dev/null 2>&1
 apt-get install -y nginx > /dev/null 2>&1
@@ -16,23 +22,29 @@ mkdir -p /etc/nginx/html
 echo "Hello World!" | tee /etc/nginx/html/index.html > /dev/null
 
 # Configure the redirection in Nginx
-cat > /etc/nginx/sites-available/default << EOF
+cat > /etc/nginx/sites-available/redirect_me << EOF
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
 
     server_name _;
-
-    root   /etc/nginx/html;
-    index  index.html index.htm;
 
     location /redirect_me {
         return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
     }
 
-    # Rest of the server configuration...
+location / {
+	root /etc/nginx/html;
+	index index.html;
+}
+    # Additional server configuration...
 }
 EOF
+
+# Create a symbolic link to enable the configurattion
+ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+#Test Nginx configuration
+nginx -7
 
 # Restart Nginx
 service nginx restart > /dev/null 2>&1
