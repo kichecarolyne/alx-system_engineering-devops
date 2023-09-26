@@ -1,40 +1,38 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
-#
-# colors
-blue='\e[1;34m'
-brown='\e[0;33m'
-green='\e[1;32m'
-reset='\033[0m'
+# Script: 3-redirection
+# Description: Configures a new Ubuntu machine to redirect /redirect_me to another page.
+# Requirements:
+#   - Configures Nginx to redirect /redirect_me with a "301 Moved Permanently" status code
+#   - Sets the redirection target to a specific page
 
-echo -e "${blue}Updating and installing ${brown}Nginx${blue}.${reset}\n"
-sudo apt-get update -y -qq && \
-	 sudo apt-get install nginx -y
+# Install Nginx (if not already installed)
+apt-get update > /dev/null 2>&1
+apt-get install -y nginx > /dev/null 2>&1
 
-echo -e "\n${blue}Setting up some minor stuff.${reset}\n"
+# Create the /etc/nginx/html directory if it doesn't exist
+mkdir -p /etc/nginx/html
 
-# starting nginx service
-sudo service nginx start
+# Create the index.html file with "Hello World!" content if it doesn't exist
+echo "Hello World!" | tee /etc/nginx/html/index.html > /dev/null
 
-# allowing nginx on firewall
-sudo ufw allow 'Nginx HTTP'
+# Configure the redirection in Nginx
+cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-# Give the user ownership to website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
+    server_name _;
 
-# Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+    root   /etc/nginx/html;
+    index  index.html index.htm;
 
-# Creating new index
-echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
 
-# Setting up /redirect_me to a youtube video
-sudo sed -i '24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+    # Rest of the server configuration...
+}
+EOF
 
-# Restarting nginx
-sudo service nginx restart
-
-echo -e "\n${green}Completed.${reset} ✅\n"
+# Restart Nginx
+service nginx restart > /dev/null 2>&1
