@@ -1,27 +1,7 @@
 #!/usr/bin/env bash
+# Script that sets the port 80
 
-# Check if nginx is installed
-if ! command -v nginx &> /dev/null; then
-    echo "Nginx is not installed. Please install it first."
-    exit 1
-fi
-
-# Check if Nginx is already listening on port 80
-if grep -q "listen 80" /etc/nginx/sites-available/default; then
-    echo "Nginx is already configured to listen on port 80."
-    exit 0
-fi
-
-# Update Nginx configuration to listen on port 80
-sed -i "s/listen 8080 default_server;/listen 80 default_server;/" /etc/nginx/sites-available/default
-sed -i "s/listen \[::\]:8080 default_server ipv6only=on;/listen \[::\]:80 default_server;/" /etc/nginx/sites-available/default
+sed -i "s/listen 8080 default_server;/listen 80 default_server;/" /etc/nginx/sites-enabled/default
+sed -i "s/listen \[::\]:8080 default_server ipv6only=on;/listen \[::\]:80 default_server;/" /etc/nginx/sites-enabled/default
 sed -i "s/ ipv6only=on//" /etc/nginx/sites-available/default
-
-# Check if the changes were successful
-if [ $? -eq 0 ]; then
-    echo "Nginx has been configured to listen on port 80."
-    # Restart Nginx
-    service nginx restart
-else
-    echo "Failed to configure Nginx to listen on port 80."
-fi
+service nginx restart
